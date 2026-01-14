@@ -1,7 +1,9 @@
 # EVE-NG on AWS
 
 ### Setup
-Set up env (and virtual network interface if necessary).
+1. 環境構築用パッケージを[SharePoint(アクセス制限あり)](https://nttdocomo.sharepoint.com/:u:/s/packetcore-dev/IQABKzPX0rEISZaSC5Fo1rrLAd_FOD5cgRTCwiw7KYuj9Uc?e=AxteQC)からダウンロードする。
+
+2. 下記コマンドでインストールし、必要に応じてEVE-NGと接続するための仮想ネットワークインターフェースを設定する（EVE-NGサーバからノードに接続する場合に必要）。
 ```
 . ./setup.sh
 ```
