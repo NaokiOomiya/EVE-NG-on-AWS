@@ -1,0 +1,94 @@
+# How to run
+# eve-ng --host 18.183.56.165 --username admin --password eve lab delete --path /BGRTs
+# eve-ng --host 18.183.56.165 --username admin --password eve lab create-from-topology -t ./playbook/0_BD_BGRTs_topology.yml > ./playbook/log/0_BD_BFRTs_topology.log
+---
+  name: BGRTs_demoA
+  description: Build BG-RTs with IOL
+  path: "/"
+  nodes:
+    - name: Shuyaku-RT-0
+      template: iol
+      image: i86bi_LinuxL3-AdvEnterpriseK9-M2_157_3_May_2018.bin
+      node_type: iol
+      ethernet: 2
+      left: 150
+      top: 150
+    - name: L2SW-0
+      template: iol
+      image: i86bi_LinuxL2-AdvEnterpriseK9-M_152_May_2018.bin
+      node_type: iol
+      ethernet: 2
+      icon: Switch.png
+      left: 350
+      top: 150
+    - name: FW-0
+      template: iol
+      image: i86bi_LinuxL3-AdvEnterpriseK9-M2_157_3_May_2018.bin
+      node_type: iol
+      left: 350
+      top: 50
+    - name: BG-RT-0
+      template: iol
+      image: i86bi_LinuxL3-AdvEnterpriseK9-M2_157_3_May_2018.bin
+      node_type: iol
+      ethernet: 2
+      left: 550
+      top: 150
+      # configuration:
+      #   file: /home/ubuntu/eve/playbook/config/config_BG-RT-0.cfg # config投入が隣の機器に入る。。。
+    - name: Shuyaku-RT-1
+      template: iol
+      image: i86bi_LinuxL3-AdvEnterpriseK9-M2_157_3_May_2018.bin
+      node_type: iol
+      ethernet: 2
+      left: 150
+      top: 250
+    - name: L2SW-1
+      template: iol
+      image: i86bi_LinuxL2-AdvEnterpriseK9-M_152_May_2018.bin
+      node_type: iol
+      ethernet: 2
+      icon: Switch.png
+      left: 350
+      top: 250
+    - name: FW-1
+      template: iol
+      image: i86bi_LinuxL3-AdvEnterpriseK9-M2_157_3_May_2018.bin
+      node_type: iol
+      left: 350
+      top: 350
+    - name: BG-RT-1
+      template: iol
+      image: i86bi_LinuxL3-AdvEnterpriseK9-M2_157_3_May_2018.bin
+      node_type: iol
+      ethernet: 2
+      left: 550
+      top: 250
+    - name: ESW
+      template: iol
+      image: i86bi_LinuxL3-AdvEnterpriseK9-M2_157_3_May_2018.bin
+      node_type: iol
+      icon: Switch L3.png
+      left: 50
+      top: 200
+    - name: IPX-RT
+      template: iol
+      image: i86bi_LinuxL3-AdvEnterpriseK9-M2_157_3_May_2018.bin
+      node_type: iol
+      left: 650
+      top: 200
+  links:
+    node:
+      - {"src": "L2SW-0", "src_label": "e0/1", "dst": "Shuyaku-RT-0", "dst_label": "e0/1"}
+      - {"src": "L2SW-0", "src_label": "e0/2", "dst": "FW-0", "dst_label": "e0/2"}
+      - {"src": "L2SW-0", "src_label": "e0/3", "dst": "BG-RT-0", "dst_label": "e0/3"}
+      - {"src": "L2SW-1", "src_label": "e0/1", "dst": "Shuyaku-RT-1", "dst_label": "e0/1"}
+      - {"src": "L2SW-1", "src_label": "e0/2", "dst": "FW-1", "dst_label": "e0/2"}
+      - {"src": "L2SW-1", "src_label": "e0/3", "dst": "BG-RT-1", "dst_label": "e0/3"}
+      - {"src": "ESW", "src_label": "e0/0", "dst": "Shuyaku-RT-0", "dst_label": "e0/0"}
+      - {"src": "ESW", "src_label": "e0/1", "dst": "Shuyaku-RT-1", "dst_label": "e0/0"}
+      - {"src": "Shuyaku-RT-0", "src_label": "e1/0", "dst": "Shuyaku-RT-1", "dst_label": "e1/0"}
+      - {"src": "L2SW-0", "src_label": "e1/0", "dst": "L2SW-1", "dst_label": "e1/0"}
+      - {"src": "BG-RT-0", "src_label": "e1/0", "dst": "BG-RT-1", "dst_label": "e1/0"}
+      - {"src": "IPX-RT", "src_label": "e0/0", "dst": "BG-RT-0", "dst_label": "e0/0"}
+      - {"src": "IPX-RT", "src_label": "e0/1", "dst": "BG-RT-1", "dst_label": "e0/0"}

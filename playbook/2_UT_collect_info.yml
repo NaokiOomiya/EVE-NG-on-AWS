@@ -1,0 +1,84 @@
+---
+- name: MNO Commercial Network - Unit Test Execution
+  hosts: L2SW_MNO, R_BG
+  gather_facts: no
+  vars:
+    # 証跡保存ディレクトリの定義
+    evidence_dir: "./2_UT_info/{{ lookup('pipe', 'date +%Y%m%d') }}"
+
+  tasks:
+    - name: 1. 物理・論理・管理情報の取得
+      cisco.ios.ios_command:
+        commands:
+          - show version | include (uptime|image|Software|Last reload)
+          - show ip interface brief
+          - show interfaces | include (line protocol|MTU|duplex|Output drops|Input errors|load-interval)
+          - show vrf
+          - show ip route vrf *
+          - show policy-map interface
+          - show ntp status
+          - show logging | include (Buffer|Level|Log)
+          - show running-config | include service timestamps
+          # - show snmp contact
+          - show run | section line vty
+          - show ip arp
+      register: result_outputs
+      ignore_errors: yes
+
+    - name: 2. 証跡保存用ディレクトリの作成
+      delegate_to: localhost
+      ansible.builtin.file:
+        path: "{{ evidence_dir }}"
+        state: directory
+        mode: '0755'
+      run_once: true
+
+    - name: 3. 試験証跡（エビデンス）のファイル書き出し
+      delegate_to: localhost
+      ansible.builtin.copy:
+        content: |
+          ######################################################################
+          # MNO Unit Test Evidence - {{ inventory_hostname }}
+          # Date: {{ lookup('pipe', 'date "+%Y-%m-%d %H:%M:%S"') }}
+          ######################################################################
+
+          [01. System & Version]
+          {{ result_outputs.stdout[0] }}
+
+          [02. IP Interface Brief]
+          {{ result_outputs.stdout[1] }}
+
+          [03. Interface Details (MTU/Errors/Load-Interval)]
+          {{ result_outputs.stdout[2] }}
+
+          [04. VRF Definition]
+          {{ result_outputs.stdout[3] }}
+
+          [05. Routing Table (All VRFs)]
+          {{ result_outputs.stdout[4] }}
+
+          [06. QoS Policy-map Statistics]
+          {{ result_outputs.stdout[5] }}
+
+          [07. NTP Synchronization]
+          {{ result_outputs.stdout[6] }}
+
+          [08. Logging Settings]
+          {{ result_outputs.stdout[7] }}
+
+          [09. Service Timestamps]
+          {{ result_outputs.stdout[8] }}
+
+          [10. VTY Management / Timeout]
+          {{ result_outputs.stdout[9] }}
+
+          [11. ARP Table]
+          {{ result_outputs.stdout[10] }}
+
+          --- END OF EVIDENCE ---
+        dest: "{{ evidence_dir }}/{{ inventory_hostname }}_UT_Evidence.txt"
+
+    - name: 4. 実行結果のサマリ表示
+      debug:
+        msg: "Host {{ inventory_hostname }} の単体試験エビデンスを {{ evidence_dir }} に保存しました。"
+    

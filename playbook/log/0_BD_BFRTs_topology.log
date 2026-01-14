@@ -1,0 +1,24 @@
+[04:49:52] Lab created: //BGRTs_demoA.unl                                                                                  commands.py:452
+[04:49:53] node Shuyaku-RT-0 completed                                                                                     commands.py:202
+           node L2SW-0 completed                                                                                           commands.py:202
+           node FW-0 completed                                                                                             commands.py:202
+           node BG-RT-0 completed                                                                                          commands.py:202
+           node Shuyaku-RT-1 completed                                                                                     commands.py:202
+           node L2SW-1 completed                                                                                           commands.py:202
+[04:49:54] node FW-1 completed                                                                                             commands.py:202
+           node BG-RT-1 completed                                                                                          commands.py:202
+           node ESW completed                                                                                              commands.py:202
+           node IPX-RT completed                                                                                           commands.py:202
+[04:49:56] link L2SW-0:e0/1 <-> Shuyaku-RT-0:e0/1 completed                                                                commands.py:166
+           link L2SW-0:e0/2 <-> FW-0:e0/2 completed                                                                        commands.py:166
+[04:49:57] link L2SW-0:e0/3 <-> BG-RT-0:e0/3 completed                                                                     commands.py:166
+           link L2SW-1:e0/1 <-> Shuyaku-RT-1:e0/1 completed                                                                commands.py:166
+[04:49:59] link L2SW-1:e0/2 <-> FW-1:e0/2 completed                                                                        commands.py:166
+[04:50:00] link L2SW-1:e0/3 <-> BG-RT-1:e0/3 completed                                                                     commands.py:166
+           link ESW:e0/0 <-> Shuyaku-RT-0:e0/0 completed                                                                   commands.py:166
+[04:50:02] link ESW:e0/1 <-> Shuyaku-RT-1:e0/0 completed                                                                   commands.py:166
+           link Shuyaku-RT-0:e1/0 <-> Shuyaku-RT-1:e1/0 completed                                                          commands.py:166
+           link L2SW-0:e1/0 <-> L2SW-1:e1/0 completed                                                                      commands.py:166
+[04:50:03] link BG-RT-0:e1/0 <-> BG-RT-1:e1/0 completed                                                                    commands.py:166
+           link IPX-RT:e0/0 <-> BG-RT-0:e0/0 completed                                                                     commands.py:166
+[04:50:04] link IPX-RT:e0/1 <-> BG-RT-1:e0/0 completed                                                                     commands.py:166

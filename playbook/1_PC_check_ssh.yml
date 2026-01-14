@@ -1,0 +1,16 @@
+---
+# Prior confirmation
+- name: ルーターへのSSH接続テスト
+  hosts: L2SW_MNO
+  gather_facts: no  # ネットワーク機器の場合はnoにする
+
+  tasks:
+    - name: 機器情報を取得して接続を確認する
+      cisco.ios.ios_facts:
+        gather_subset: min
+      register: result
+
+    - name: 接続成功メッセージの表示
+      debug:
+        msg: "SSH接続成功！ OSバージョンは {{ ansible_net_version }} です。"
+      when: result is succeeded

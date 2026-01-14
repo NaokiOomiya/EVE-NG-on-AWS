@@ -1,0 +1,30 @@
+---
+# inventory.yml
+
+routers:
+  hosts:
+    R_Agg:
+      ansible_host: 192.168.10.252
+      ansible_port: 22
+    R_FW:
+      ansible_host: 192.168.1.2
+      ansible_port: 22
+    R_BG:
+      ansible_host: 192.168.2.1
+      ansible_port: 22
+    L2SW_MNO:
+      ansible_host: 192.168.10.7
+      ansible_port: 22
+    L2SW_IPX:
+      ansible_host: 192.168.20.8
+      ansible_port: 22
+
+  vars:
+    ansible_user: cisco
+    ansible_password: cisco
+    ansible_network_os: cisco.ios.ios # 接続方式: IOSのネットワーク接続プラグインを使用
+    ansible_connection: network_cli
+    ansible_python_interpreter: /usr/bin/python3
+    ansible_connect_timeout: 60
+    ansible_command_timeout: 60
+    ansible_terminal_initial_answer_timeout: 60

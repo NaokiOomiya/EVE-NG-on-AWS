@@ -1,0 +1,26 @@
+
+PLAY [MNO Commercial Network - Unit Test Execution] ****************************
+
+TASK [1. 物理・論理・管理情報の取得] *******************************************
+ok: [L2SW_MNO]
+ok: [R_BG]
+
+TASK [2. 証跡保存用ディレクトリの作成] *****************************************
+changed: [L2SW_MNO -> localhost]
+
+TASK [3. 試験証跡（エビデンス）のファイル書き出し] *****************************
+changed: [R_BG -> localhost]
+changed: [L2SW_MNO -> localhost]
+
+TASK [4. 実行結果のサマリ表示] *************************************************
+ok: [L2SW_MNO] => {
+    "msg": "Host L2SW_MNO の単体試験エビデンスを ./2_UT_info/20260111 に保存しました。"
+}
+ok: [R_BG] => {
+    "msg": "Host R_BG の単体試験エビデンスを ./2_UT_info/20260111 に保存しました。"
+}
+
+PLAY RECAP *********************************************************************
+L2SW_MNO                   : ok=4    changed=2    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+R_BG                       : ok=3    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+

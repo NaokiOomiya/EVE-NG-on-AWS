@@ -1,0 +1,88 @@
+- name: 障害試験 & 結果確認Playbook
+  hosts: L2SW_MNO
+  gather_facts: no
+  vars:
+    L2SW_IPX: "{{ hostvars['L2SW_IPX']['ansible_host'] }}"
+    fw_0: "{{ hostvars['R_FW']['ansible_host'] }}"
+    R_Agg_1: "192.168.10.253"
+    target_if: "Ethernet0/1"
+
+  tasks:
+    # ----------------------------------------------------------------
+    # Step 1: 事前確認
+    # ----------------------------------------------------------------
+    - name: "[事前確認] Ubuntuから現在の経路を確認"
+      ansible.builtin.shell: "traceroute -n -w 1 -q 1 {{ L2SW_IPX }}"
+      delegate_to: localhost
+      register: pre_trace
+
+    - name: "[DEBUG] 事前経路の表示"
+      ansible.builtin.debug:
+        msg: 
+          - "ターゲットIP: {{ L2SW_IPX }}"
+          - "期待する0系GW: {{ fw_0 }}"
+          - "実際のtraceroute結果:"
+          - "{{ pre_trace.stdout_lines }}"
+
+    - name: "[判定] FW0系を通っているか検証"
+      ansible.builtin.assert:
+        that: "fw_0 in pre_trace.stdout"
+        fail_msg: "現在0系を通っていません。試験を中止します。"
+        success_msg: "0系経由の通信を確認しました。"
+
+    # ----------------------------------------------------------------
+    # Step 2 & 3: 障害試験セクション
+    # ----------------------------------------------------------------
+    - name: "障害試験セクション"
+      block:
+        - name: "[障害発生] {{ target_if }} をシャットダウン"
+          cisco.ios.ios_config:
+            lines: shutdown
+            parents: "interface {{ target_if }}"
+
+        - name: "[監視] 疎通復旧を待機中 (Ping実行中...)"
+          ansible.builtin.shell: "ping -c 1 -W 1 {{ L2SW_IPX }}"
+          delegate_to: localhost
+          register: recovery_ping
+          until: recovery_ping.rc == 0
+          retries: 24
+          # delay: 5
+
+        - name: "[DEBUG] 復旧までの試行回数"
+          ansible.builtin.debug:
+            msg: "Pingが成功しました。試行回数: {{ recovery_ping.attempts }}回 (約{{ recovery_ping.attempts }}秒)"
+
+        - name: "[事後確認] 復旧後の経路を確認"
+          ansible.builtin.shell: "traceroute -n -w 1 -q 1 {{ L2SW_IPX }}"
+          delegate_to: localhost
+          register: post_trace
+
+        - name: "[DEBUG] 事後経路の表示"
+          ansible.builtin.debug:
+            msg: 
+              - "迂回後のtraceroute結果:"
+              - "{{ post_trace.stdout_lines }}"
+
+        - name: "[判定] 1系を通っているか検証"
+          ansible.builtin.assert:
+            that: "R_Agg_1 in post_trace.stdout"
+            fail_msg: "復旧しましたが、期待した1系ルート ({{ R_Agg_1 }}) を通っていません。"
+            success_msg: "1系への正常な切り替えを確認しました。"
+
+      # ----------------------------------------------------------------
+      # Step 4: 切り戻し (常に実行)
+      # ----------------------------------------------------------------
+      always:
+        - name: "[切り戻し] {{ target_if }} を no shutdown"
+          cisco.ios.ios_config:
+            lines: no shutdown
+            parents: "interface {{ target_if }}"
+
+        - name: "[最終確認] インターフェース状態"
+          cisco.ios.ios_command:
+            commands: "show ip interface brief {{ target_if }}"
+          register: final_status
+
+        - name: "[DEBUG] 最終ステータス表示"
+          ansible.builtin.debug:
+            msg: "インターフェース {{ target_if }} は {{ 'UP' if 'up' in final_status.stdout[0] else 'DOWN' }} です。"

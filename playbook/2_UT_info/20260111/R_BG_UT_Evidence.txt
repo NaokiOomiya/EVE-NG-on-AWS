@@ -1,0 +1,106 @@
+######################################################################
+# MNO Unit Test Evidence - R_BG
+# Date: 2026-01-11 05:11:56
+######################################################################
+
+[01. System & Version]
+Cisco IOS Software, Linux Software (I86BI_LINUX-ADVENTERPRISEK9-M), Version 15.7(3)M2, DEVELOPMENT TEST SOFTWARE
+R_BG uptime is 1 hour, 51 minutes
+System image file is "unix:/opt/unetlab/addons/iol/bin/i86bi_LinuxL3-AdvEnterpriseK9-M2_15"
+Last reload reason: Unknown reason
+
+[02. IP Interface Brief]
+Interface                  IP-Address      OK? Method Status                Protocol
+Ethernet0/0                192.168.3.1     YES NVRAM  up                    up      
+Ethernet0/1                192.168.20.252  YES NVRAM  up                    up      
+Ethernet0/2                unassigned      YES NVRAM  administratively down down    
+Ethernet0/3                192.168.2.1     YES NVRAM  up                    up      
+Loopback0                  3.3.3.3         YES NVRAM  up                    up
+
+[03. Interface Details (MTU/Errors/Load-Interval)]
+Ethernet0/0 is up, line protocol is up 
+  MTU 1500 bytes, BW 10000 Kbit/sec, DLY 1000 usec, 
+  Auto-duplex, Auto Speed, media type is unknown media type
+Ethernet0/1 is up, line protocol is up 
+  MTU 1500 bytes, BW 10000 Kbit/sec, DLY 1000 usec, 
+  Auto-duplex, Auto Speed, media type is unknown media type
+Ethernet0/2 is administratively down, line protocol is down 
+  MTU 1500 bytes, BW 10000 Kbit/sec, DLY 1000 usec, 
+  Auto-duplex, Auto Speed, media type is unknown media type
+Ethernet0/3 is up, line protocol is up 
+  MTU 1500 bytes, BW 10000 Kbit/sec, DLY 1000 usec, 
+  Auto-duplex, Auto Speed, media type is unknown media type
+Loopback0 is up, line protocol is up 
+  MTU 1514 bytes, BW 8000000 Kbit/sec, DLY 5000 usec,
+
+[04. VRF Definition]
+
+
+[05. Routing Table (All VRFs)]
+Codes: L - local, C - connected, S - static, R - RIP, M - mobile, B - BGP
+       D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area 
+       N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
+       E1 - OSPF external type 1, E2 - OSPF external type 2
+       i - IS-IS, su - IS-IS summary, L1 - IS-IS level-1, L2 - IS-IS level-2
+       ia - IS-IS inter area, * - candidate default, U - per-user static route
+       o - ODR, P - periodic downloaded static route, H - NHRP, l - LISP
+       a - application route
+       + - replicated route, % - next hop override, p - overrides from PfR
+
+Gateway of last resort is not set
+
+      1.0.0.0/32 is subnetted, 1 subnets
+O        1.1.1.1 [110/21] via 192.168.2.2, 01:19:48, Ethernet0/3
+      2.0.0.0/32 is subnetted, 1 subnets
+O        2.2.2.2 [110/11] via 192.168.2.2, 01:49:55, Ethernet0/3
+      3.0.0.0/32 is subnetted, 1 subnets
+C        3.3.3.3 is directly connected, Loopback0
+      5.0.0.0/32 is subnetted, 1 subnets
+O        5.5.5.5 [110/11] via 192.168.2.4, 01:49:55, Ethernet0/3
+O     192.168.1.0/24 [110/20] via 192.168.2.2, 01:19:58, Ethernet0/3
+      192.168.2.0/24 is variably subnetted, 2 subnets, 2 masks
+C        192.168.2.0/24 is directly connected, Ethernet0/3
+L        192.168.2.1/32 is directly connected, Ethernet0/3
+      192.168.3.0/24 is variably subnetted, 2 subnets, 2 masks
+C        192.168.3.0/24 is directly connected, Ethernet0/0
+L        192.168.3.1/32 is directly connected, Ethernet0/0
+O     192.168.10.0/24 [110/30] via 192.168.2.2, 00:32:53, Ethernet0/3
+      192.168.20.0/24 is variably subnetted, 2 subnets, 2 masks
+C        192.168.20.0/24 is directly connected, Ethernet0/1
+L        192.168.20.252/32 is directly connected, Ethernet0/1
+
+[06. QoS Policy-map Statistics]
+
+
+[07. NTP Synchronization]
+%NTP is not enabled.
+
+[08. Logging Settings]
+Buffer logging:  level debugging, 21 messages logged, xml disabled,
+    Exception Logging: size (4096 bytes)
+        Logging Source-Interface:       VRF Name:
+Log Buffer (4096 bytes):
+
+[09. Service Timestamps]
+service timestamps debug datetime msec
+service timestamps log datetime msec
+
+[10. VTY Management / Timeout]
+line vty 0 4
+ login local
+ transport input ssh
+
+[11. ARP Table]
+Protocol  Address          Age (min)  Hardware Addr   Type   Interface
+Internet  192.168.2.1             -   aabb.cc00.9030  ARPA   Ethernet0/3
+Internet  192.168.2.2           110   aabb.cc00.b020  ARPA   Ethernet0/3
+Internet  192.168.2.3           110   aabb.cc00.8030  ARPA   Ethernet0/3
+Internet  192.168.2.4           110   aabb.cc01.1020  ARPA   Ethernet0/3
+Internet  192.168.3.1             -   aabb.cc00.9000  ARPA   Ethernet0/0
+Internet  192.168.3.2           110   aabb.cc00.c000  ARPA   Ethernet0/0
+Internet  192.168.20.8          109   aabb.cc81.0000  ARPA   Ethernet0/1
+Internet  192.168.20.252          -   aabb.cc00.9010  ARPA   Ethernet0/1
+Internet  192.168.20.253         87   aabb.cc00.8020  ARPA   Ethernet0/1
+Internet  192.168.20.254          -   0000.0c07.ac01  ARPA   Ethernet0/1
+
+--- END OF EVIDENCE ---

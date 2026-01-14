@@ -1,0 +1,71 @@
+(.venv) ubuntu@ip-172-31-4-137:~/eve$ python ./bedrock.py
+[DEBUG START]
+
+--- Device: 192.168.10.252 ---
+---show run interface:
+
+Building configuration...
+
+Current configuration : 155 bytes
+!
+interface Ethernet0/1
+ ip address 192.168.10.252 255.255.255.0
+ standby 1 ip 192.168.10.254
+ standby 1 priority 110
+ standby 1 preempt
+ duplex auto
+end
+
+---show standby:
+                     P indicates configured to preempt.
+                     |
+Interface   Grp  Pri P State   Active          Standby         Virtual IP
+Et0/1       1    110 P Active  local           192.168.10.253  192.168.10.254Connection to 192.168.10.252 closed by remote host.
+
+--- Device: 192.168.10.253 ---
+---show run interface:
+
+Building configuration...
+
+Current configuration : 131 bytes
+!
+interface Ethernet0/2
+ ip address 192.168.10.253 255.255.255.0
+ standby 0 preempt
+ standby 1 ip 192.168.10.254
+ duplex auto
+end
+
+---show standby:
+                     P indicates configured to preempt.
+                     |
+Interface   Grp  Pri P State   Active          Standby         Virtual IP
+Et0/2       1    100   Standby 192.168.10.252  local           192.168.10.254
+[DEBUG END]
+
+{'analysis': 'HSRP (Hot Standby Router Protocol) のVIP (Virtual IP Address) が正しく冗長化されていません。これは、デバイス 192.168.10.253 のインターフェース Ethernet0/2 の設定が原因です。HSRP グループ 1 で standby 1 ip コマンドが設定されておらず、代わりに standby 0 preempt コマンドが設定されているため、正しく動作していません。', 'fixes': {'192.168.10.253': ['conf t', 'interface Ethernet0/2', 'no standby 0 preempt', 'standby 1 ip 192.168.10.254', 'end']}}
+
+==================================================
+AIによる修正案が生成されました。内容を確認してください。
+==================================================
+【AIの分析】
+HSRP (Hot Standby Router Protocol) のVIP (Virtual IP Address) が正しく冗長化されていません。これは、デバイス 192.168.10.253 のインターフェース Ethernet0/2 の設定が原因です。HSRP グループ 1 で standby 1 ip コマンドが設定されておらず、代わりに standby 0 preempt コマンドが設定されているため、正しく動作していません。
+【修正案】
+{'192.168.10.253': ['conf t', 'interface Ethernet0/2', 'no standby 0 preempt', 'standby 1 ip 192.168.10.254', 'end']}
+
+==================================================
+上記の設定変更を実行しますか？ (yes/no): yes
+
+承認されました。実行を開始します...
+--- [192.168.10.253] に設定を投入中... ---
+Pseudo-terminal will not be allocated because stdin is not a terminal.
+
+R_Agg_1#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+R_Agg_1(config)#interface Ethernet0/2
+R_Agg_1(config-if)#no standby 0 preempt
+R_Agg_1(config-if)#standby 1 ip 192.168.10.254
+R_Agg_1(config-if)#endConnection to 192.168.10.253 closed by remote host.
+--- [192.168.10.253] 設定完了 ---
+
+すべての修正が完了しました。
