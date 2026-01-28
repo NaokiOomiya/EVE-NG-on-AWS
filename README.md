@@ -1,11 +1,35 @@
 # EVE-NG on AWS
+EVE-NG on AWS環境を再現するためのリポジトリ。オンプレ上での構築も可能（なはず）。
+
+### 前提条件
+- Ubuntu 20.04
+- Python 3.8.10
 
 ### Setup
 1. 環境構築用パッケージを[SharePoint(アクセス制限あり)](https://nttdocomo.sharepoint.com/:u:/s/packetcore-dev/IQABKzPX0rEISZaSC5Fo1rrLAd_FOD5cgRTCwiw7KYuj9Uc?e=AxteQC)からダウンロードする。
 
-2. 下記コマンドでインストールし、必要に応じてEVE-NGと接続するための仮想ネットワークインターフェースを設定する（EVE-NGサーバからノードに接続する場合に必要）。
+2. 下記コマンドで本リポジトリをダウンロードする。
+```
+git clone https://github.com/NaokiOomiya/EVE-NG-on-AWS.git
+cd EVE-NG-on-AWS
+```
+
+3. 下記コマンドで必要なパッケージをインストールする。
 ```
 . ./setup.sh
+```
+
+4. （必要に応じて実施）実行環境とEVE-NGノードを接続したい場合、実行環境に仮想ネットワークインターフェースを設定する。
+```
+sudo ip addr add 192.168.10.10/24 dev pnet0
+sudo ip route add 192.168.0.0/16 via 192.168.10.254
+```
+
+5. インストールした環境のIPアドレス宛にウェブブラウザからログインし、EVE-NGにログインする。
+```
+【デフォルト情報】
+- ID: admin
+- Pass: eve
 ```
 
 ### Files
